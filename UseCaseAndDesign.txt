@@ -1,0 +1,59 @@
+Use case:
+. Script starts up.
+. Script builds a tlog file name based on day and date (E.G. Mon_09_09_2019.tlog).
+. Script checks if the tlog file already exists in the script local directory.
+  ) Year Folder, Month sub-folders
+  ) If file does not exist, it is created with empty data.
+  ) If it exists, move to next step.
+    > Parse values for global variables, if they exist, and copy their data to script variables.
+      { Total Logged On Time
+      { Total Logged Off Time
+      { Longest Work Period
+      { Longest Break Period
+. "Logged On Time" count timer for script begins.
+  ) Time stamped entry is made in tlog file indicating start of script/workday.
+. If "Logged On Time" reaches 50 minutes.
+  ) Task Tray warning indicates to take a break in 10 mins.
+  ) Time stamped entry is made in tlog file to indicate that the warning was displayed.
+. If "Logged On Time" reaches 60 minutes.
+  ) Dialog pop-up indicating to take a break is displayed
+  ) Time stamped entry is made in tlog file to indicate that the pop-up was displayed
+. If screen is not locked at this point:
+  ) "Logged On Time" continues to count.
+  ) Task tray warning indicates to take a break every 15 mins.
+    > Time stamped entry is made in tlog file to indicate that the warning was displayed.
+. If screen is locked:
+  ) "Logged On Time" stops counting.
+  ) "Logged On Time" data is added to a global variable for total time logged on.
+  ) "Logged On Time" data is compared to data in global variable "Longest Work Period"
+    > If "Logged On Time" data is longer than "Longest Work Period", then assign that data to "Longest Work Period"
+    > If "Logged On Time" data is shorter than "Longest Work Period", do nothing
+  ) "Logged On Time" is reset.
+  ) Time stamped entry is made in tlog file to indicate that the screen was locked.
+  ) "Logged Off Time" count timer for script begins.
+. When screen is unlocked again:
+  ) "Logged Off Time" count timer for script stops.
+  ) Time stamped entry is made in tlog file to indicate that the screen was unlocked.
+  ) "Logged On Time" count timer begins again.
+  ) "Logged Off Time" data is added to a global variable for total time logged off.
+  ) "Logged Off Time" data is compared to data in global variable "Longest Break Period"
+    > If "Logged Off Time" data is longer than "Longest Break Period", then assign that data to "Longest Break Period"
+    > If "Logged Off Time" data is shorter than "Longest Break Period", do nothing
+  ) "Logged Off Time" count timer resets.
+. On Script exit/close-down
+  ) Wrap-up entries are made in tlog file
+    > Total Logged On Time
+    > Total Logged Off Time
+    > Longest Work Period
+    > Longest Break Period
+    
+    
+----------------------------------------------------------
+ 
+ 
+Next steps:
+. Run for an extended period to test
+. Add task tray options to:
+  ) Display value of current timer in secs / hh:mm:ss (maybe actually in the tray, single click...)
+. Graphs? Statistics? 
+. Arrays/maps for each exact work/break period? 
